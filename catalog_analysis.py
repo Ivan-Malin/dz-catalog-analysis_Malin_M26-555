@@ -1,4 +1,8 @@
-def main():
+"""Анализ каталога фильмов."""
+
+
+def main() -> None:
+    """Точка входа программы."""
     print("Hello from dz-catalog-analysis-malin-m26-555!")
 
 
