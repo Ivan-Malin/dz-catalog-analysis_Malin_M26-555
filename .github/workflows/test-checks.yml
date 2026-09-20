@@ -1,0 +1,30 @@
+# Проводит проверки линтера
+
+name: Run all repo checks
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  # lint-strict-dev-check:
+  # TODO - add
+
+  # Run all complience checks
+  compliance-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v6
+    - name: Setup uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+    - name: Lint with ruff base task rules
+      run: |
+        # Stop the build if there are Python syntax errors
+        uv run ruff check .
+    - name: Test repo on uv runing
+      run: |
+        uv run catalog_analysis.py
