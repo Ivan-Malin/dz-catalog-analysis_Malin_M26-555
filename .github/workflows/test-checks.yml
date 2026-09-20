@@ -27,4 +27,5 @@ jobs:
         uv run ruff check .
     - name: Test repo on uv runing
       run: |
+        # We run this check because this program runs non-blocking and must return immediate result
         uv run catalog_analysis.py
