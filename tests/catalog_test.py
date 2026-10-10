@@ -5,8 +5,11 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
                                    
 from catalog_analysis import (
+    actor_filmography,
     average_rating,
+    calc_more_than_avg,
     catalog_age_stats,
+    count_by_genre,
     decade_label,
     duration_in_hours,
     format_report_line,
@@ -83,3 +86,40 @@ def test_top_n_by_rating() -> None:
     top_n_calculated = top_n_by_rating(movies)
     # Сравнение tuple в питоне идёт по элементно
     assert list(top_n_calculated) == list(top_n)
+
+def test_count_by_genre() -> None:
+    genre_info = {
+        "drama": 5,
+        "sci-fi": 3,
+        "comedy": 3,
+        "thriller": 3,
+        "action": 2,
+        "mystery": 1
+    } 
+    genre_info_calculated = count_by_genre(movies)
+    assert genre_info_calculated == genre_info
+
+def test_actor_filmography() -> None:
+    actor_info = {
+        "T. Chalamet": ["The Dune Chronicles", "The Last Bakery", "Red Harbor"],
+        "R. Ferguson": ["The Dune Chronicles", "midnight in oslo"],
+        "O. Isaac": ["The Dune Chronicles", "Comet Racers", "The Quiet Algorithm"],
+        "A. Novak": ["Kitchen Stories", "The Last Bakery", "Two Left Shoes"],
+        "M. Ferguson": ["Kitchen Stories", "The Quiet Algorithm"],
+        "J. Bloom": ["silent hours", "Garden of Static"],
+        "K. Lee": ["silent hours", "midnight in oslo", "Two Left Shoes"],
+        "P. Diaz": ["Comet Racers", "Garden of Static", "Red Harbor"],
+    }
+    actor_info_calculated = actor_filmography(movies)
+    assert actor_info_calculated == actor_info
+
+def test_calc_more_than_avg() -> None:
+    more_than_avg = {
+        'The Dune Chronicles': 8.6,
+        'The Last Bakery': 7.8,
+        'midnight in oslo': 8.9,
+        'The Quiet Algorithm': 9.2,
+        'Red Harbor': 7.3,
+    }
+    more_than_avg_calculated = calc_more_than_avg(movies)
+    assert more_than_avg_calculated == more_than_avg

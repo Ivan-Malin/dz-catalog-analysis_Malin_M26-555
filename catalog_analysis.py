@@ -133,6 +133,7 @@ def check_if_catalog_is_valid(movies: list) -> None:
     Предположим, что эта проверка быстрая (что было бы так, если бы мы
     предобработали и перевели каталог в адекватную структуру) и её
     допускается вызывать в каждой функции (т.к. это необходимо), тогда...
+    Будем её так и использовать.
 
     Args:
         movies (list): каталог фильмов
@@ -276,6 +277,7 @@ def decade_label(year: int) -> str:
 
 # 3. Часть
 
+# Замечание - названия этой функции в ДЗ нет, выбрано произвольное
 def print_some_data(movies: list) -> None:
     """Выводит не комедии и один из шедевров среди всех фильмов.
 
@@ -409,6 +411,66 @@ def top_n_by_rating(movies: dict, n: int = 3) -> list:
                 movies, key=lambda m: m["rating"], reverse=True,
                 )
             ][:n]
+
+# 6. Часть
+
+def count_by_genre(movies: dict) -> dict:
+    """Возвращает количество фильмов в каждом жанре.
+
+    Args:
+        movies (dict): каталог фильмов
+
+    Returns:
+        dict: словарь формата {жанр: количество фильмов}
+
+    """
+    check_if_catalog_is_valid(movies)
+
+    genre_info = {}
+    for movie in movies:
+        for genre in movie["genres"]:
+            # ХЗ куда его ещё можно было впихнуть...
+            genre_info[genre] = genre_info.get(genre, 0) + 1
+    return genre_info
+
+def actor_filmography(movies: dict) -> dict:
+    """Возвращает фильмографию актёров.
+
+    Args:
+        movies (dict): каталог фильмов
+
+    Returns:
+        dict: словарь формата {актер: [список названий фильмов]}
+
+    """
+    check_if_catalog_is_valid(movies)
+
+    actor_info = {}
+    for movie in movies:
+        for actor in movie["actors"]:
+            if actor not in actor_info:
+                actor_info[actor] = []
+            actor_info[actor].append(movie["title"])
+
+    return actor_info
+
+# Замечание - названия этой функции в ДЗ нет, выбрано произвольное
+def calc_more_than_avg(movies: dict) -> dict:
+    """Возвращает фильмы с оценкой выше средней.
+
+    Args:
+        movies (dict): каталог фильмов
+
+    Returns:
+        dict: словарь формата {title: rating}
+
+    """
+    check_if_catalog_is_valid(movies)
+
+    avg = average_rating(movies)
+
+    return {m["title"]: m["rating"] for m in movies if m["rating"] > avg}
+
 
 def main() -> None:
     """Точка входа программы."""
