@@ -169,9 +169,9 @@ def duration_in_hours(minutes: int) -> str:
     Returns:
         str: строка времени формата "2ч 35м"
     """
-    
+
     assert isinstance(minutes, int), "minutes должно быть целочисленным"
-    
+
     return f"{minutes // 60}ч {minutes % 60}м"
 
 
