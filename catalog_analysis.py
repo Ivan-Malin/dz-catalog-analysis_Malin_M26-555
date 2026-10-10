@@ -163,7 +163,7 @@ def average_rating(movies: list) -> float:
     """
     check_if_catalog_is_valid(movies)
 
-    # Использует реккурентную формулу
+    # Использует реккурентную формулу рассчёта среднего
     avg_rating = 0
 
     for i in range(len(movies)):
@@ -372,7 +372,41 @@ def format_report_line(movie: dict) -> str:
 
     return f'"{title}" ({year}) - {rating}/10, {duration}, жанры: {genres}'
 
+# 5. Часть
+def titles_sorted_by_rating(movies: dict) -> list:
+    """Сортирует фильмы по убыванию рейтинга.
 
+    Args:
+        movies (dict): каталог фильмов
+
+    Returns:
+        list: список названий фильмов
+
+    """
+    check_if_catalog_is_valid(movies)
+
+    return (
+        m["title"] for m in sorted(
+            movies, key=lambda m: m["rating"], reverse=True,
+            )
+        )
+
+def top_n_by_rating(movies: dict, n: int = 3) -> list:
+    """Находит топ n фильмов.
+
+    Args:
+        movies (dict): каталог фильмов
+        n (int, optional): количество фильмов в топе. Defaults to 3.
+
+    Returns:
+        list: список пар (title, rating) в порядке убывания рейтинга
+
+    """
+    return [
+            (m["title"], m["rating"]) for m in sorted(
+                movies, key=lambda m: m["rating"], reverse=True,
+                )
+            ][:n]
 
 def main() -> None:
     """Точка входа программы."""
@@ -380,4 +414,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    print_some_data(movies)
+    print(top_n_by_rating(movies))

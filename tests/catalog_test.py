@@ -14,6 +14,8 @@ from catalog_analysis import (
     movies,
     normalize_title,
     rating_tier,
+    titles_sorted_by_rating,
+    top_n_by_rating,
 )
 
 
@@ -54,3 +56,30 @@ def test_make_slug() -> None:
 def test_format_report_line() -> None:
     assert (format_report_line(movies[7]) ==
             '"The Quiet Algorithm" (2024) - 9.2/10, 1ч 58м, жанры: drama, sci-fi')
+
+def test_titles_sorted_by_rating() -> None:
+    sorted_titles = [
+        'The Quiet Algorithm', 
+        'midnight in oslo', 
+        'The Dune Chronicles', 
+        'The Last Bakery', 
+        'Red Harbor', 
+        'Kitchen Stories', 
+        'silent hours', 
+        'Two Left Shoes', 
+        'Comet Racers', 
+        'Garden of Static'
+    ]
+    sorted_titles_calculated = titles_sorted_by_rating(movies)
+    # Сравнение листов в питоне идёт по элементно
+    assert list(sorted_titles_calculated) == list(sorted_titles)
+
+def test_top_n_by_rating() -> None:
+    top_n = [
+        ("The Quiet Algorithm", 9.2),
+        ("midnight in oslo", 8.9),
+        ("The Dune Chronicles", 8.6)
+    ]
+    top_n_calculated = top_n_by_rating(movies)
+    # Сравнение tuple в питоне идёт по элементно
+    assert list(top_n_calculated) == list(top_n)
