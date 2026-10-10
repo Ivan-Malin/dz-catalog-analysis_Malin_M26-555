@@ -12,6 +12,7 @@ from catalog_analysis import (
     catalog_age_stats,
     common_actors,
     count_by_genre,
+    count_long_movies,
     decade_label,
     duration_in_hours,
     format_report_line,
@@ -55,6 +56,10 @@ def test_decade_label() -> None:
     assert decade_label(2020) == "новые"
     assert decade_label(2017) == "недавние"
     assert decade_label(2014) == "старые"
+
+
+def test_count_long_movies() -> None:
+    assert count_long_movies(movies) == 4
 
 
 def test_normalize_title() -> None:

@@ -275,6 +275,8 @@ def decade_label(year: int) -> str:
         raise TypeError(msg)
 
     match year:
+        # По формулировки задания не понятно,
+        # точное ли неравенство или нет
         case _ if year >= MID_FILM_YEAR:
             return "новые"
         case _ if year >= OLD_FILM_YEAR:
@@ -288,7 +290,7 @@ def decade_label(year: int) -> str:
 
 # Замечание - названия этой функции в ДЗ нет, выбрано произвольное
 def print_some_data(movies: list) -> None:
-    """Выводит не комедии и один из шедевров среди всех фильмов.
+    """Выводит не комедии из каталога.
 
     Args:
         movies (list): каталог фильмов
@@ -296,29 +298,55 @@ def print_some_data(movies: list) -> None:
     """
     check_if_catalog_is_valid(movies)
 
-    print("Комедии:")
+    print("Не комедии:")
     for movie in movies:
-        if "comedy" not in movie["genres"]:
+        if "comedy" in movie["genres"]:
             continue
         print(f"- {movie['title']}")
     print()
 
+
+def find_peak_cinema(movies: list, peak_rating: float = 9.0) -> None:
+    """Выводит в консоль 1 шедевр из каталога.
+
+    Args:
+        movies (list): каталог фильмов
+        peak_rating (float): минимальный рейтинг для шедевра
+
+    """
     i = 0
     while i < len(movies):
         movie = movies[i]
-        if not isinstance(movie, dict):
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
-        if "genres" not in movie:
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
-        if not isinstance(movie["genres"], set):
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
 
-        movies[i]
+        if movie["rating"] > peak_rating:
+            print(f"Шедевр: {movie['title']}")
+            break
+
         i += 1
-    print("Шедевров не найдено")
+    else:
+        print("Шедевров не найдено")
+
+
+def count_long_movies(movies: list, threshold: int = 120) -> int:
+    """Считает количество фильмов длиннее threshold минут.
+
+    Args:
+        movies (list): каталог фильмов
+        threshold (int, optional): минимальное время длины фильма
+                                   в минутах. По умолчанию 120.
+
+    Returns:
+        int: количество фильмов
+
+    """
+    check_if_catalog_is_valid(movies)
+
+    sum_of_minutes = 0
+
+    for movie in movies:
+        sum_of_minutes += int(movie["duration_min"] > threshold)
+
+    return sum_of_minutes
 
 
 # 4. Часть
@@ -353,14 +381,7 @@ def make_slug(title: str) -> str:
         str: название фильма в формате slug
 
     """
-    if not isinstance(title, str):
-        msg = "'title' должен быть str"
-        raise TypeError(msg)
-
-    new_words = [word.lower() for word in title.split(" ")]
-
-    # Хз зачем тут replace, но так требует условие задачи...
-    return " ".join(new_words).replace(" ", "-")
+    return title.replace(" ", "-").lower()
 
 
 def format_report_line(movie: dict) -> str:
@@ -565,8 +586,8 @@ def iter_high_rated(movies: list, min_rating: float = 8.0) -> Iterable[dict]:
         movies (list): каталог фильмов
         min_rating (float, optional): минимальный рейтинг. По умолчанию 8.0.
 
-    Returns:
-        Iterable[dict]: итератор каталога фильмов
+    Yields:
+        dict: итератор каталога фильмов
 
     """
     check_if_catalog_is_valid(movies)
