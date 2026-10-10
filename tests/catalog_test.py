@@ -36,7 +36,7 @@ def test_catalog_age_stats() -> None:
     min_year, max_year, avg_year = catalog_age_stats(movies)
     assert min_year == 15
     assert max_year == 2
-    assert avg_year == 7
+    assert avg_year == 8
 
 
 def test_duration_in_hours() -> None:

@@ -208,7 +208,7 @@ def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
     return (
         current_year - min_year,
         current_year - max_year,
-        current_year - math.ceil(avg_year),
+        math.ceil(current_year - avg_year),
     )
 
 
@@ -400,14 +400,14 @@ def titles_sorted_by_rating(movies: list) -> list:
     """
     check_if_catalog_is_valid(movies)
 
-    return (
+    return [
         m["title"]
         for m in sorted(
             movies,
             key=lambda m: m["rating"],
             reverse=True,
         )
-    )
+    ]
 
 
 def top_n_by_rating(movies: list, n: int = 3) -> list:
@@ -609,10 +609,50 @@ def show_generated_sum() -> int:
     return result
 
 
-def main() -> None:
-    """Точка входа программы."""
-    print("Hello from dz-catalog-analysis-malin-m26-555!")
+# 9. Часть
+
+
+def build_report(movies: list) -> None:
+    """Выводить отчёт по каталогу фильмов.
+
+    Args:
+        movies (list): каталог фильмов
+
+    """
+    avg_rating = average_rating(movies)
+    avg_age = catalog_age_stats(movies)[2]
+
+    # Лучше, конечно, заново функцию адекватную именно под эту задачу реализовать...
+    best_3_films = [
+        next(m for m in movies if m["title"] == title)
+        for title, rating in top_n_by_rating(movies)
+    ]
+    top_n_films = [format_report_line(f) for f in best_3_films]
+
+    genres_count = sorted(
+        count_by_genre(movies).items(),
+        key=lambda gc: gc[1],
+        reverse=True,
+    )
+    _all_genres = sorted(
+        all_genres(movies),
+    )
+
+    print(
+        f"""ОТЧЁТ ПО КАТАЛОГУ
+Средний рейтинг: {avg_rating}
+Средний возраст фильмов: {avg_age} лет
+
+Топ-3 фильма:
+  {"\n  ".join(top_n_films)}
+
+Фильмов по жанрам:
+  {"\n  ".join(f"{g[0]} - {g[1]}" for g in genres_count)}
+
+Все жанры каталога: {", ".join(_all_genres)}
+""",
+    )
 
 
 if __name__ == "__main__":
-    print(all_genres(movies))
+    build_report(movies)
