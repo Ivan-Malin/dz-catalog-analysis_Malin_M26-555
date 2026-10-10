@@ -16,10 +16,13 @@ from catalog_analysis import (
     duration_in_hours,
     format_report_line,
     genres_only_in_one,
+    iter_high_rated,
     make_slug,
     movies,
     normalize_title,
     rating_tier,
+    show_generated_sum,
+    show_iter_high_rated_work,
     titles_sorted_by_rating,
     top_n_by_rating,
 )
@@ -156,3 +159,49 @@ def test_genres_only_in_one() -> None:
     genres = {"mystery"}
     genres_calculated = genres_only_in_one(movies[5:6], movies[:5])
     assert genres_calculated == genres
+
+
+def test_iter_high_rated() -> None:
+    high_rated = [
+        {
+            "title": "The Dune Chronicles",
+            "year": 2021,
+            "genres": {"sci-fi", "drama"},
+            "rating": 8.6,
+            "duration_min": 155,
+            "actors": ["T. Chalamet", "R. Ferguson", "O. Isaac"],
+        },
+        {
+            "title": "midnight in oslo",
+            "year": 2020,
+            "genres": {"thriller", "mystery"},
+            "rating": 8.9,
+            "duration_min": 124,
+            "actors": ["K. Lee", "R. Ferguson"],
+        },
+        {
+            "title": "The Quiet Algorithm",
+            "year": 2024,
+            "genres": {"sci-fi", "drama"},
+            "rating": 9.2,
+            "duration_min": 118,
+            "actors": ["M. Ferguson", "O. Isaac"],
+        },
+    ]
+    high_rated_calculated = list(iter_high_rated(movies, min_rating=8.0))
+    assert high_rated == high_rated_calculated
+
+
+def test_show_iter_high_rated_work() -> None:
+    movies_str = [
+        '"The Dune Chronicles" (2021) - 8.6/10, 2ч 35м, жанры: drama, sci-fi',
+        '"Midnight In Oslo" (2020) - 8.9/10, 2ч 4м, жанры: mystery, thriller',
+        '"The Quiet Algorithm" (2024) - 9.2/10, 1ч 58м, жанры: drama, sci-fi',
+    ]
+    movies_str_calcultated = show_iter_high_rated_work()
+    assert movies_str_calcultated == movies_str
+
+def test_show_generated_sum() -> None:
+    _sum = 713
+    sum_calculated = show_generated_sum()
+    assert sum_calculated == _sum

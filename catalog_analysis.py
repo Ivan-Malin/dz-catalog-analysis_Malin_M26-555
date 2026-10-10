@@ -1,6 +1,7 @@
 """Анализ каталога фильмов."""
 
 import math
+from collections.abc import Iterable
 
 movies = [
     {
@@ -414,7 +415,7 @@ def top_n_by_rating(movies: list, n: int = 3) -> list:
 
     Args:
         movies (list): каталог фильмов
-        n (int, optional): количество фильмов в топе. Defaults to 3.
+        n (int, optional): количество фильмов в топе. По умолчанию 3.
 
     Returns:
         list: список первых n пар (title, rating) в порядке убывания рейтинга
@@ -552,6 +553,60 @@ def genres_only_in_one(movies_a: list, movies_b: list) -> set:
     genres_b = all_genres(movies_b)
 
     return genres_a - genres_b
+
+
+# 8. Часть
+
+
+def iter_high_rated(movies: list, min_rating: float = 8.0) -> Iterable[dict]:
+    """Лениво отдает фильмы с рейтингом не ниже min_rating.
+
+    Args:
+        movies (list): каталог фильмов
+        min_rating (float, optional): минимальный рейтинг. По умолчанию 8.0.
+
+    Returns:
+        Iterable[dict]: итератор каталога фильмов
+
+    """
+    check_if_catalog_is_valid(movies)
+
+    for movie in movies:
+        if movie["rating"] >= min_rating:
+            yield movie
+
+
+# Замечание - названия этой функции в ДЗ нет, выбрано произвольное
+def show_iter_high_rated_work() -> list[str]:
+    """Демонстрирует работу iter_high_rated.
+
+    Returns:
+        list[str]: список описаний наиболее оценённых фильмов
+
+    """
+    result = []
+    for movie in iter_high_rated(movies):
+        line = format_report_line(movie)
+        print(line)
+        result.append(line)
+
+    return result
+
+
+# Замечание - названия этой функции в ДЗ нет, выбрано произвольное
+def show_generated_sum() -> int:
+    """Демонстрирует работу iter_high_rated.
+
+    Returns:
+        int: суммарное время для просмотра всех наиболее оценённых фильмов
+
+    """
+    min_rating = 7
+    result = sum(m["duration_min"] for m in movies if m["rating"] > min_rating)
+
+    print(result)
+
+    return result
 
 
 def main() -> None:
