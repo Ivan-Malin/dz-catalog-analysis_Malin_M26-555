@@ -1,9 +1,16 @@
 # Популярный грязный хак по импорту проекта
-import sys
 import os
+import sys
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
                                    
-from catalog_analysis import *
+from catalog_analysis import (
+    average_rating,
+    catalog_age_stats,
+    duration_in_hours,
+    movies,
+)
+
 
 def test_avg() -> None:
     assert average_rating(movies) == 7.2
