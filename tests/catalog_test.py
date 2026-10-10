@@ -7,8 +7,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from catalog_analysis import (
     average_rating,
     catalog_age_stats,
+    decade_label,
     duration_in_hours,
     movies,
+    rating_tier,
 )
 
 
@@ -26,3 +28,14 @@ def test_catalog_age_stats() -> None:
 def test_duration_in_hours() -> None:
     assert duration_in_hours(121) == "2ч 1м"
     assert duration_in_hours(1) == "0ч 1м"
+
+def test_rating_tier() -> None:
+    assert rating_tier(9) == "шедевр"
+    assert rating_tier(8.9999) == "хорошо"
+    assert rating_tier(6.5) == "средне"
+    assert rating_tier(4) == "слабо"
+
+def test_decade_label() -> None:
+    assert decade_label(2020) == "новые"
+    assert decade_label(2017) == "недавние"
+    assert decade_label(2014) == "старые"

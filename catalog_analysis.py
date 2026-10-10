@@ -85,6 +85,12 @@ movies = [
     },
 ]
 
+BEST_RATING = 9
+GOOD_RATING = 7
+MID_RATING = 5
+
+MID_FILM_YEAR = 2020
+OLD_FILM_YEAR = 2015
 
 def average_rating(movies: list) -> float:
     """Возвращает среднюю оценку по каталогу.
@@ -181,6 +187,55 @@ def duration_in_hours(minutes: int) -> str:
         raise TypeError(msg)
 
     return f"{minutes // 60}ч {minutes % 60}м"
+
+def rating_tier(rating: float) -> str:
+    """Возвращает категорию по оценке.
+
+    Категории: "шедевр" (≥9), "хорошо" (7-8.9), "средне" (5-6.9), "слабо" (<5).
+
+    Args:
+        rating (float): оценка
+
+    Returns:
+        str: категория
+
+    """
+    if not isinstance(rating, (int|float)):
+        msg = "'rating' должно быть числом"
+        raise TypeError(msg)
+
+    tier = None
+
+    if rating >= GOOD_RATING:
+        tier = "шедевр" if rating >= BEST_RATING else "хорошо"
+    elif rating >= MID_RATING:
+        tier = "средне"
+    else:
+        tier = "слабо"
+
+    return tier
+
+def decade_label(year: int) -> str:
+    """Возвращает оценку старости фильму.
+
+    Args:
+        year (int): год фильма
+
+    Returns:
+        str: оценка старости
+
+    """
+    if not isinstance(year, int):
+        msg = "'year' должно быть целым числом"
+        raise TypeError(msg)
+
+    match year:
+        case _ if year >= MID_FILM_YEAR:
+            return "новые"
+        case _ if year >= OLD_FILM_YEAR:
+            return "недавние"
+        case _:
+            return "старые"
 
 def main() -> None:
     """Точка входа программы."""

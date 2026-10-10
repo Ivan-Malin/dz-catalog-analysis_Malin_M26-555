@@ -23,7 +23,7 @@ jobs:
         uv run ruff check .
     - name: Test repo on unit tests
       run: |
-        uv run .\tests\catalog_test.py
+        uv run pytest
 
   lint-strict-dev-check:
     runs-on: ubuntu-latest
