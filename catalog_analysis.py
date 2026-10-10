@@ -375,11 +375,11 @@ def format_report_line(movie: dict) -> str:
     return f'"{title}" ({year}) - {rating}/10, {duration}, жанры: {genres}'
 
 # 5. Часть
-def titles_sorted_by_rating(movies: dict) -> list:
+def titles_sorted_by_rating(movies: list) -> list:
     """Сортирует фильмы по убыванию рейтинга.
 
     Args:
-        movies (dict): каталог фильмов
+        movies (list): каталог фильмов
 
     Returns:
         list: список названий фильмов
@@ -393,11 +393,11 @@ def titles_sorted_by_rating(movies: dict) -> list:
             )
         )
 
-def top_n_by_rating(movies: dict, n: int = 3) -> list:
+def top_n_by_rating(movies: list, n: int = 3) -> list:
     """Находит топ n фильмов.
 
     Args:
-        movies (dict): каталог фильмов
+        movies (list): каталог фильмов
         n (int, optional): количество фильмов в топе. Defaults to 3.
 
     Returns:
@@ -414,11 +414,11 @@ def top_n_by_rating(movies: dict, n: int = 3) -> list:
 
 # 6. Часть
 
-def count_by_genre(movies: dict) -> dict:
+def count_by_genre(movies: list) -> dict:
     """Возвращает количество фильмов в каждом жанре.
 
     Args:
-        movies (dict): каталог фильмов
+        movies (list): каталог фильмов
 
     Returns:
         dict: словарь формата {жанр: количество фильмов}
@@ -433,11 +433,11 @@ def count_by_genre(movies: dict) -> dict:
             genre_info[genre] = genre_info.get(genre, 0) + 1
     return genre_info
 
-def actor_filmography(movies: dict) -> dict:
+def actor_filmography(movies: list) -> dict:
     """Возвращает фильмографию актёров.
 
     Args:
-        movies (dict): каталог фильмов
+        movies (list): каталог фильмов
 
     Returns:
         dict: словарь формата {актер: [список названий фильмов]}
@@ -455,11 +455,11 @@ def actor_filmography(movies: dict) -> dict:
     return actor_info
 
 # Замечание - названия этой функции в ДЗ нет, выбрано произвольное
-def calc_more_than_avg(movies: dict) -> dict:
+def calc_more_than_avg(movies: list) -> dict:
     """Возвращает фильмы с оценкой выше средней.
 
     Args:
-        movies (dict): каталог фильмов
+        movies (list): каталог фильмов
 
     Returns:
         dict: словарь формата {title: rating}
