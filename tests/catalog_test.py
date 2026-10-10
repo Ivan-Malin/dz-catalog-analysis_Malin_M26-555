@@ -6,13 +6,16 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
                                    
 from catalog_analysis import (
     actor_filmography,
+    all_genres,
     average_rating,
     calc_more_than_avg,
     catalog_age_stats,
+    common_actors,
     count_by_genre,
     decade_label,
     duration_in_hours,
     format_report_line,
+    genres_only_in_one,
     make_slug,
     movies,
     normalize_title,
@@ -123,3 +126,18 @@ def test_calc_more_than_avg() -> None:
     }
     more_than_avg_calculated = calc_more_than_avg(movies)
     assert more_than_avg_calculated == more_than_avg
+
+def test_all_genres() -> None:
+    _all_genres = {'action', 'comedy', 'drama', 'mystery', 'sci-fi', 'thriller'}
+    all_genres_calculated = all_genres(movies)
+    assert all_genres_calculated == _all_genres
+
+def test_common_actors() -> None:
+    _common_actors = {"O. Isaac"}
+    common_actors_calculated = common_actors(movies[0], movies[3])
+    assert common_actors_calculated == _common_actors
+
+def test_genres_only_in_one() -> None:
+    genres = {"mystery"} 
+    genres_calculated = genres_only_in_one(movies[5:6], movies[:5])
+    assert genres_calculated == genres

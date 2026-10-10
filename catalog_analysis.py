@@ -471,6 +471,61 @@ def calc_more_than_avg(movies: list) -> dict:
 
     return {m["title"]: m["rating"] for m in movies if m["rating"] > avg}
 
+# 7. Часть
+
+def all_genres(movies: list) -> set:
+    """Находит множество всех уникальных жанров каталога.
+
+    Args:
+        movies (list): каталог фильмов
+
+    Returns:
+        set: множество уникальных жанров каталога
+
+    """
+    check_if_catalog_is_valid(movies)
+
+    _all_genres = set()
+    for movie in movies:
+        _all_genres |= movie["genres"]
+
+    return _all_genres
+
+def common_actors(movie1: dict, movie2: dict) -> set:
+    """Возвращает множество актеров, снимавшихся в обоих фильмах.
+
+    Args:
+        movie1 (dict): фильм
+        movie2 (dict): фильм
+
+    Returns:
+        set: множество имён актёров (str)
+
+    """
+    check_if_movie_is_valid(movie1)
+    check_if_movie_is_valid(movie2)
+
+    return set(movie1["actors"]) & set(movie2["actors"])
+
+def genres_only_in_one(movies_a: list, movies_b: list) -> set:
+    """Возвращает жанры, встречающиеся в movies_a, но не в movies_b.
+
+    Args:
+        movies_a (dict): каталог фильмов
+        movies_b (dict): каталог фильмов
+
+    Returns:
+        set: множество имён актёров (str)
+
+    """
+    check_if_catalog_is_valid(movies_a)
+    check_if_catalog_is_valid(movies_b)
+
+    genres_a = all_genres(movies_a)
+    genres_b = all_genres(movies_b)
+
+    return genres_a - genres_b
+
 
 def main() -> None:
     """Точка входа программы."""
@@ -478,4 +533,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    print(top_n_by_rating(movies))
+    print(all_genres(movies))
