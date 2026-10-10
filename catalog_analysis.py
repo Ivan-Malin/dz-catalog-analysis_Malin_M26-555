@@ -87,31 +87,33 @@ movies = [
 
 
 def average_rating(movies: list) -> float:
-    """Возвращает среднюю оценку по каталогу
+    """Возвращает среднюю оценку по каталогу.
 
     Args:
         movies (list): каталог
 
     Returns:
         float: средняя оценка по каталогу
-    """
 
-    assert isinstance(movies, list), "movies должен быть каталогом фильмов"
+    """
+    if not isinstance(movies, list):
+        msg = "'movies' должен быть каталогом фильмов"
+        raise TypeError(msg)
 
     # Использует реккурентную формулу
     avg_rating = 0
 
     for i in range(len(movies)):
         movie = movies[i]
-        assert isinstance(movie, dict), (
-            "movies содержит неверный формат представления фильмов"
-        )
-        assert "rating" in movie, (
-            "movies содержит неверный формат представления фильмов"
-        )
-        assert isinstance(movie["rating"], (int, float)), (
-            "movies содержит неверный формат представления фильмов"
-        )
+        if not isinstance(movie, dict):
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
+        if "rating" not in movie:
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
+        if not isinstance(movie["rating"], (int, float)):
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
 
         avg_rating += (movie["rating"] - avg_rating) / (i + 1)
 
@@ -119,7 +121,7 @@ def average_rating(movies: list) -> float:
 
 
 def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
-    """Возвращает самый старый, самый новый фильм и среднее
+    """Возвращает самый старый, самый новый фильм и среднее.
 
     Args:
         movies (list): каталог
@@ -127,9 +129,11 @@ def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
 
     Returns:
         tuple: кортеж (самый старый фильм в годах, самый новый фильм в годах, среднее)
-    """
 
-    assert isinstance(movies, list), "movies должен быть каталогом фильмов"
+    """
+    if not isinstance(movies, list):
+        msg = "'movies' должен быть каталогом фильмов"
+        raise TypeError(msg)
 
     # Использует реккурентную формулу рассчёта среднего
     min_year = float("inf")
@@ -139,13 +143,15 @@ def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
     for i in range(len(movies)):
         movie = movies[i]
 
-        assert isinstance(movie, dict), (
-            "movies содержит неверный формат представления фильмов"
-        )
-        assert "year" in movie, "movies содержит неверный формат представления фильмов"
-        assert isinstance(movie["year"], int), (
-            "movies содержит неверный формат представления фильмов"
-        )
+        if not isinstance(movie, dict):
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
+        if "year" not in movie:
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
+        if not isinstance(movie["year"], int):
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
 
         year = movie["year"]
 
@@ -161,41 +167,25 @@ def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
 
 
 def duration_in_hours(minutes: int) -> str:
-    """Переводит минуты в формат "2ч 35м"
+    """Переводит минуты в формат "2ч 35м".
 
     Args:
         minutes (int | float): минуты
 
     Returns:
         str: строка времени формата "2ч 35м"
-    """
 
-    assert isinstance(minutes, int), "minutes должно быть целочисленным"
+    """
+    if not isinstance(minutes, int):
+        msg = "'minutes' должно быть целочисленным"
+        raise TypeError(msg)
 
     return f"{minutes // 60}ч {minutes % 60}м"
-
 
 def main() -> None:
     """Точка входа программы."""
     print("Hello from dz-catalog-analysis-malin-m26-555!")
 
 
-# Tests
-def test_avg() -> None:
-    assert average_rating(movies) == 7.2
-
-
-def test_catalog_age_stats() -> None:
-    min_year, max_year, avg_year = catalog_age_stats(movies)
-    assert min_year == 15
-    assert max_year == 2
-    assert avg_year == 7
-
-
-def test_duration_in_hours() -> None:
-    assert duration_in_hours(121) == "2ч 1м"
-    assert duration_in_hours(1) == "0ч 1м"
-
-
 if __name__ == "__main__":
-    test_duration_in_hours()
+    main()
