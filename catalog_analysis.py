@@ -92,6 +92,50 @@ MID_RATING = 5
 MID_FILM_YEAR = 2020
 OLD_FILM_YEAR = 2015
 
+def check_if_catalog_is_valid(movies: list) -> None:
+    """Вызывает ошибку, если movie не является корректным каталогом фильмов.
+
+    Каталог фильмов слабоструктурирован. По-хорошему его изначально нужно
+    предобработать и перевести в нормальную структуру, но т.к. по условию
+    задачи этого не сделать, то его нужно проверить на валидность.
+    Предположим, что эта проверка быстрая (что было бы так, если бы мы
+    предобработали и перевели каталог в адекватную структуру) и её
+    допускается вызывать в каждой функции (т.к. это необходимо), тогда...
+
+    Args:
+        movies (list): каталог фильмов
+
+    """
+    msg = "'movies' должен быть каталогом фильмов."
+    if not isinstance(movies, list):
+        raise TypeError(msg)
+
+    for movie in movies:
+        if not isinstance(movie, dict):
+            raise TypeError(msg)
+
+        if not (
+            isinstance(movie.get("title"), str)
+            and isinstance(movie.get("genres"), set)
+            and isinstance(movie.get("actors"), list)
+            and isinstance(movie.get("rating"), (float, int))
+            and not isinstance(movie.get("rating"), bool)
+            and isinstance(movie.get("year"), int)
+            and not isinstance(movie.get("year"), bool)
+            and isinstance(movie.get("duration_min"), int)
+            and not isinstance(movie.get("duration_min"), bool)
+        ):
+            raise TypeError(msg)
+
+        if not (
+            all(isinstance(g, str) for g in movie["genres"])
+            and all(isinstance(a, str) for a in movie["actors"])
+        ):
+            raise TypeError(msg)
+
+
+# 1. Часть
+
 def average_rating(movies: list) -> float:
     """Возвращает среднюю оценку по каталогу.
 
@@ -102,24 +146,13 @@ def average_rating(movies: list) -> float:
         float: средняя оценка по каталогу
 
     """
-    if not isinstance(movies, list):
-        msg = "'movies' должен быть каталогом фильмов"
-        raise TypeError(msg)
+    check_if_catalog_is_valid(movies)
 
     # Использует реккурентную формулу
     avg_rating = 0
 
     for i in range(len(movies)):
         movie = movies[i]
-        if not isinstance(movie, dict):
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
-        if "rating" not in movie:
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
-        if not isinstance(movie["rating"], (int, float)):
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
 
         avg_rating += (movie["rating"] - avg_rating) / (i + 1)
 
@@ -137,9 +170,7 @@ def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
         tuple: кортеж (самый старый фильм в годах, самый новый фильм в годах, среднее)
 
     """
-    if not isinstance(movies, list):
-        msg = "'movies' должен быть каталогом фильмов"
-        raise TypeError(msg)
+    check_if_catalog_is_valid(movies)
 
     # Использует реккурентную формулу рассчёта среднего
     min_year = float("inf")
@@ -148,16 +179,6 @@ def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
 
     for i in range(len(movies)):
         movie = movies[i]
-
-        if not isinstance(movie, dict):
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
-        if "year" not in movie:
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
-        if not isinstance(movie["year"], int):
-            msg = "'movies' должен быть каталогом фильмов"
-            raise TypeError(msg)
 
         year = movie["year"]
 
@@ -170,7 +191,6 @@ def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
         current_year - max_year,
         current_year - math.ceil(avg_year),
     )
-
 
 def duration_in_hours(minutes: int) -> str:
     """Переводит минуты в формат "2ч 35м".
@@ -187,6 +207,8 @@ def duration_in_hours(minutes: int) -> str:
         raise TypeError(msg)
 
     return f"{minutes // 60}ч {minutes % 60}м"
+
+# 2. Часть
 
 def rating_tier(rating: float) -> str:
     """Возвращает категорию по оценке.
@@ -237,10 +259,49 @@ def decade_label(year: int) -> str:
         case _:
             return "старые"
 
+# 3. Часть
+
+def print_some_data(movies: list) -> None:
+    """Выводит не комедии и один из шедевров среди всех фильмов.
+
+    Args:
+        movies (list): каталог фильмов
+
+    """
+    check_if_catalog_is_valid(movies)
+
+    print("Комедии:")
+    for movie in movies:
+        if "comedy" not in movie["genres"]:
+            continue
+        print(f"- {movie["title"]}")
+    print()
+
+    i = 0
+    while i < len(movies):
+        movie = movies[i]
+        if not isinstance(movie, dict):
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
+        if "genres" not in movie:
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
+        if not isinstance(movie["genres"], set):
+            msg = "'movies' должен быть каталогом фильмов"
+            raise TypeError(msg)
+
+        movies[i]
+        i += 1
+    print("Шедевров не найдено")
+
+
+
+
+
 def main() -> None:
     """Точка входа программы."""
     print("Hello from dz-catalog-analysis-malin-m26-555!")
 
 
 if __name__ == "__main__":
-    main()
+    print_some_data(movies)
