@@ -9,7 +9,10 @@ from catalog_analysis import (
     catalog_age_stats,
     decade_label,
     duration_in_hours,
+    format_report_line,
+    make_slug,
     movies,
+    normalize_title,
     rating_tier,
 )
 
@@ -39,3 +42,15 @@ def test_decade_label() -> None:
     assert decade_label(2020) == "новые"
     assert decade_label(2017) == "недавние"
     assert decade_label(2014) == "старые"
+
+def test_normalize_title() -> None:
+    assert normalize_title("каждый") == "Каждый"
+    assert normalize_title("каждый ДеНь") == "Каждый День"
+
+def test_make_slug() -> None:
+    assert make_slug("Каждый День") == "каждый-день"
+    assert make_slug("Кони и Ко") == "кони-и-ко"
+
+def test_format_report_line() -> None:
+    assert (format_report_line(movies[7]) ==
+            '"The Quiet Algorithm" (2024) - 9.2/10, 1ч 58м, жанры: drama, sci-fi')

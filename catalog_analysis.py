@@ -92,8 +92,40 @@ MID_RATING = 5
 MID_FILM_YEAR = 2020
 OLD_FILM_YEAR = 2015
 
+def check_if_movie_is_valid(movie: dict) -> None:
+    """Вызывает ошибку, если movie не является словарём описания фильма.
+
+    Args:
+        movie (dict): описание фильма
+
+    """
+    msg = "'movie' должен быть корректным описанием фильма."
+
+    if not isinstance(movie, dict):
+        raise TypeError(msg)
+
+    if not (
+        isinstance(movie.get("title"), str)
+        and isinstance(movie.get("genres"), set)
+        and isinstance(movie.get("actors"), list)
+        and isinstance(movie.get("rating"), (float, int))
+        and not isinstance(movie.get("rating"), bool)
+        and isinstance(movie.get("year"), int)
+        and not isinstance(movie.get("year"), bool)
+        and isinstance(movie.get("duration_min"), int)
+        and not isinstance(movie.get("duration_min"), bool)
+    ):
+        raise TypeError(msg)
+
+    if not (
+        all(isinstance(g, str) for g in movie["genres"])
+        and all(isinstance(a, str) for a in movie["actors"])
+    ):
+        raise TypeError(msg)
+
+
 def check_if_catalog_is_valid(movies: list) -> None:
-    """Вызывает ошибку, если movie не является корректным каталогом фильмов.
+    """Вызывает ошибку, если movies не является корректным каталогом фильмов.
 
     Каталог фильмов слабоструктурирован. По-хорошему его изначально нужно
     предобработать и перевести в нормальную структуру, но т.к. по условию
@@ -111,27 +143,10 @@ def check_if_catalog_is_valid(movies: list) -> None:
         raise TypeError(msg)
 
     for movie in movies:
-        if not isinstance(movie, dict):
-            raise TypeError(msg)
-
-        if not (
-            isinstance(movie.get("title"), str)
-            and isinstance(movie.get("genres"), set)
-            and isinstance(movie.get("actors"), list)
-            and isinstance(movie.get("rating"), (float, int))
-            and not isinstance(movie.get("rating"), bool)
-            and isinstance(movie.get("year"), int)
-            and not isinstance(movie.get("year"), bool)
-            and isinstance(movie.get("duration_min"), int)
-            and not isinstance(movie.get("duration_min"), bool)
-        ):
-            raise TypeError(msg)
-
-        if not (
-            all(isinstance(g, str) for g in movie["genres"])
-            and all(isinstance(a, str) for a in movie["actors"])
-        ):
-            raise TypeError(msg)
+        try:
+            check_if_movie_is_valid(movie)
+        except TypeError as ex:
+            raise TypeError(msg) from ex
 
 
 # 1. Часть
@@ -294,7 +309,68 @@ def print_some_data(movies: list) -> None:
         i += 1
     print("Шедевров не найдено")
 
+# 4. Часть
+def normalize_title(title: str) -> str:
+    """Приводит строку к Title Case.
 
+    Args:
+        title (str): название фильма
+
+    Returns:
+        str: название фильма в Title Case
+
+    """
+    if not isinstance(title, str):
+        msg = "'title' должен быть str"
+        raise TypeError(msg)
+
+    new_words = [word[0].upper() + word[1:].lower() for word in title.split(" ")]
+
+    return " ".join(new_words)
+
+def make_slug(title: str) -> str:
+    """Приводит строку к slug.
+
+    Пример slug: "the-quiet-algorithm"
+
+    Args:
+        title (str): название фильма
+
+    Returns:
+        str: название фильма в формате slug
+
+    """
+    if not isinstance(title, str):
+        msg = "'title' должен быть str"
+        raise TypeError(msg)
+
+    new_words = [word.lower() for word in title.split(" ")]
+
+    # Хз зачем тут replace, но так требует условие задачи...
+    return " ".join(new_words).replace(" ", "-")
+
+def format_report_line(movie: dict) -> str:
+    """Возвращает описание фильма.
+
+    Args:
+        movie (dict): словарь описания фильма
+
+    Returns:
+        str: строка с описанием фильма
+
+    """
+    check_if_movie_is_valid(movie)
+
+    title = normalize_title(movie["title"])
+    year = movie["year"]
+    rating = movie["rating"]
+    duration = duration_in_hours(movie["duration_min"])
+    # Результат join'а set не идемпотентен (итерируется каждый раз по разному)
+    genres = ", ".join(
+        sorted(movie["genres"]),
+    )
+
+    return f'"{title}" ({year}) - {rating}/10, {duration}, жанры: {genres}'
 
 
 
