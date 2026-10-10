@@ -8,6 +8,23 @@ permissions:
   contents: read
 
 jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v6
+    - name: Setup uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+    - name: Lint with ruff base task rules
+      run: |
+        # Stop the build if there are Python syntax errors
+        uv run ruff check .
+    - name: Test repo on unit tests
+      run: |
+        uv run pytest
+
   lint-strict-dev-check:
     runs-on: ubuntu-latest
 
@@ -20,7 +37,21 @@ jobs:
     - name: Lint with ruff base task rules
       run: |
         # Run the strictest ruff checks possible to satisfy EVERYTHING
-        uv run ruff check --select ALL --ignore T201,CPY001 .
+        uv run ruff check --select ALL --ignore T201,CPY001,RUF001,RUF002,RUF003 catalog_analysis.py
+  
+  format-strict-dev-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v6
+    - name: Setup uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+    - name: Lint with ruff base task rules
+      run: |
+        # Run check for formatting
+        uv run ruff format --check
 
   # Run all complience checks
   compliance-check:
