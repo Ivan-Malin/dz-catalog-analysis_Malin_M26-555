@@ -201,6 +201,7 @@ def test_show_iter_high_rated_work() -> None:
     movies_str_calcultated = show_iter_high_rated_work()
     assert movies_str_calcultated == movies_str
 
+
 def test_show_generated_sum() -> None:
     _sum = 713
     sum_calculated = show_generated_sum()
