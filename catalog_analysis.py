@@ -92,6 +92,7 @@ MID_RATING = 5
 MID_FILM_YEAR = 2020
 OLD_FILM_YEAR = 2015
 
+
 def check_if_movie_is_valid(movie: dict) -> None:
     """Вызывает ошибку, если movie не является словарём описания фильма.
 
@@ -152,6 +153,7 @@ def check_if_catalog_is_valid(movies: list) -> None:
 
 # 1. Часть
 
+
 def average_rating(movies: list) -> float:
     """Возвращает среднюю оценку по каталогу.
 
@@ -208,6 +210,7 @@ def catalog_age_stats(movies: list, current_year: int = 2026) -> tuple:
         current_year - math.ceil(avg_year),
     )
 
+
 def duration_in_hours(minutes: int) -> str:
     """Переводит минуты в формат "2ч 35м".
 
@@ -224,7 +227,9 @@ def duration_in_hours(minutes: int) -> str:
 
     return f"{minutes // 60}ч {minutes % 60}м"
 
+
 # 2. Часть
+
 
 def rating_tier(rating: float) -> str:
     """Возвращает категорию по оценке.
@@ -238,7 +243,7 @@ def rating_tier(rating: float) -> str:
         str: категория
 
     """
-    if not isinstance(rating, (int|float)):
+    if not isinstance(rating, (int | float)):
         msg = "'rating' должно быть числом"
         raise TypeError(msg)
 
@@ -252,6 +257,7 @@ def rating_tier(rating: float) -> str:
         tier = "слабо"
 
     return tier
+
 
 def decade_label(year: int) -> str:
     """Возвращает оценку старости фильму.
@@ -275,7 +281,9 @@ def decade_label(year: int) -> str:
         case _:
             return "старые"
 
+
 # 3. Часть
+
 
 # Замечание - названия этой функции в ДЗ нет, выбрано произвольное
 def print_some_data(movies: list) -> None:
@@ -291,7 +299,7 @@ def print_some_data(movies: list) -> None:
     for movie in movies:
         if "comedy" not in movie["genres"]:
             continue
-        print(f"- {movie["title"]}")
+        print(f"- {movie['title']}")
     print()
 
     i = 0
@@ -311,6 +319,7 @@ def print_some_data(movies: list) -> None:
         i += 1
     print("Шедевров не найдено")
 
+
 # 4. Часть
 def normalize_title(title: str) -> str:
     """Приводит строку к Title Case.
@@ -329,6 +338,7 @@ def normalize_title(title: str) -> str:
     new_words = [word[0].upper() + word[1:].lower() for word in title.split(" ")]
 
     return " ".join(new_words)
+
 
 def make_slug(title: str) -> str:
     """Приводит строку к slug.
@@ -350,6 +360,7 @@ def make_slug(title: str) -> str:
 
     # Хз зачем тут replace, но так требует условие задачи...
     return " ".join(new_words).replace(" ", "-")
+
 
 def format_report_line(movie: dict) -> str:
     """Возвращает описание фильма.
@@ -374,6 +385,7 @@ def format_report_line(movie: dict) -> str:
 
     return f'"{title}" ({year}) - {rating}/10, {duration}, жанры: {genres}'
 
+
 # 5. Часть
 def titles_sorted_by_rating(movies: list) -> list:
     """Сортирует фильмы по убыванию рейтинга.
@@ -388,10 +400,14 @@ def titles_sorted_by_rating(movies: list) -> list:
     check_if_catalog_is_valid(movies)
 
     return (
-        m["title"] for m in sorted(
-            movies, key=lambda m: m["rating"], reverse=True,
-            )
+        m["title"]
+        for m in sorted(
+            movies,
+            key=lambda m: m["rating"],
+            reverse=True,
         )
+    )
+
 
 def top_n_by_rating(movies: list, n: int = 3) -> list:
     """Находит топ n фильмов.
@@ -407,12 +423,17 @@ def top_n_by_rating(movies: list, n: int = 3) -> list:
     check_if_catalog_is_valid(movies)
 
     return [
-            (m["title"], m["rating"]) for m in sorted(
-                movies, key=lambda m: m["rating"], reverse=True,
-                )
-            ][:n]
+        (m["title"], m["rating"])
+        for m in sorted(
+            movies,
+            key=lambda m: m["rating"],
+            reverse=True,
+        )
+    ][:n]
+
 
 # 6. Часть
+
 
 def count_by_genre(movies: list) -> dict:
     """Возвращает количество фильмов в каждом жанре.
@@ -432,6 +453,7 @@ def count_by_genre(movies: list) -> dict:
             # ХЗ куда его ещё можно было впихнуть...
             genre_info[genre] = genre_info.get(genre, 0) + 1
     return genre_info
+
 
 def actor_filmography(movies: list) -> dict:
     """Возвращает фильмографию актёров.
@@ -454,6 +476,7 @@ def actor_filmography(movies: list) -> dict:
 
     return actor_info
 
+
 # Замечание - названия этой функции в ДЗ нет, выбрано произвольное
 def calc_more_than_avg(movies: list) -> dict:
     """Возвращает фильмы с оценкой выше средней.
@@ -471,7 +494,9 @@ def calc_more_than_avg(movies: list) -> dict:
 
     return {m["title"]: m["rating"] for m in movies if m["rating"] > avg}
 
+
 # 7. Часть
+
 
 def all_genres(movies: list) -> set:
     """Находит множество всех уникальных жанров каталога.
@@ -491,6 +516,7 @@ def all_genres(movies: list) -> set:
 
     return _all_genres
 
+
 def common_actors(movie1: dict, movie2: dict) -> set:
     """Возвращает множество актеров, снимавшихся в обоих фильмах.
 
@@ -506,6 +532,7 @@ def common_actors(movie1: dict, movie2: dict) -> set:
     check_if_movie_is_valid(movie2)
 
     return set(movie1["actors"]) & set(movie2["actors"])
+
 
 def genres_only_in_one(movies_a: list, movies_b: list) -> set:
     """Возвращает жанры, встречающиеся в movies_a, но не в movies_b.
