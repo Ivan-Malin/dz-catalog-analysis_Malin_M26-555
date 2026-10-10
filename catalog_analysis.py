@@ -399,9 +399,11 @@ def top_n_by_rating(movies: dict, n: int = 3) -> list:
         n (int, optional): количество фильмов в топе. Defaults to 3.
 
     Returns:
-        list: список пар (title, rating) в порядке убывания рейтинга
+        list: список первых n пар (title, rating) в порядке убывания рейтинга
 
     """
+    check_if_catalog_is_valid(movies)
+
     return [
             (m["title"], m["rating"]) for m in sorted(
                 movies, key=lambda m: m["rating"], reverse=True,
