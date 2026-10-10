@@ -8,6 +8,7 @@ dependencies = []
 
 [dependency-groups]
 dev = [
+    "pytest>=9.1.1",
     "ruff>=0.16.8",
 ]
 
@@ -19,3 +20,6 @@ exclude = ["venv", ".venv", "dist", "__pycache__"]
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 ignore = [] 
+
+[tool.uv.build-backend]
+wheel-exclude = ["tests/*"] 
